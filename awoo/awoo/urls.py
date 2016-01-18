@@ -15,7 +15,21 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework_nested import routers
+from dating.views import AccountViewSet
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
+
+router = routers.SimpleRouter()
+router.register(r'accounts', AccountViewSet)
+
+urlpatterns = patterns(
+     '',
+    # ... URLs
+    url(r'^api/v1/', include(router.urls)),
+
+    url('^.*$', IndexView.as_view(), name='index'),
+)
